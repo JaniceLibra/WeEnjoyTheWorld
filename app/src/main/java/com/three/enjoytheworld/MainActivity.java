@@ -1,23 +1,24 @@
 package com.three.enjoytheworld;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import adapter.MainViewPagerFragmentAdapter;
 import fragment.AuthorFragment;
 import fragment.FindFragment;
 import fragment.HandpickFragment;
 
-public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener {
+public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener, ViewPager.OnPageChangeListener {
 
     private RadioGroup mRadioGroup;
+    private RadioButton[] mRadioButtons;
     private RadioButton rb_handpick;
     private RadioButton rb_find;
     private RadioButton rb_author;
@@ -26,9 +27,10 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     private FindFragment mFindFragment;
     private HandpickFragment mHandpickFragment;
     private AuthorFragment mAuthorFragment;
-    private FragmentManager mSupportFragmentManager;
 
-    private int currentIndex = 0;
+
+
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +43,16 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     }
 
     private void initView() {
+        viewPager = (ViewPager) findViewById(R.id.viewPager_main);
+
         mRadioGroup = (RadioGroup) findViewById(R.id.radio_group);
+        mRadioButtons = new RadioButton[3];
         rb_handpick = (RadioButton) findViewById(R.id.rb0);
+        mRadioButtons[0] = rb_handpick;
         rb_find = (RadioButton) findViewById(R.id.rb1);
+        mRadioButtons[1] = rb_find;
         rb_author = (RadioButton) findViewById(R.id.rb2);
+        mRadioButtons[2] = rb_author;
 
         mFragments = new ArrayList<>();
         mHandpickFragment = new HandpickFragment();
@@ -54,45 +62,45 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         mAuthorFragment = new AuthorFragment();
         mFragments.add(mAuthorFragment);
 
-        mSupportFragmentManager = getSupportFragmentManager();
 
+        viewPager.setAdapter(new MainViewPagerFragmentAdapter(getSupportFragmentManager(),mFragments));
 
-        transaction = mSupportFragmentManager.beginTransaction();
-        transaction.add(R.id.ll_fragment,mHandpickFragment).show(mHandpickFragment);
-        transaction.add(R.id.ll_fragment,mFindFragment).hide(mFindFragment);
-        transaction.add(R.id.ll_fragment,mAuthorFragment).hide(mAuthorFragment);
-        transaction.commit();
+        viewPager.setOnPageChangeListener(this);
 
         mRadioGroup.setOnCheckedChangeListener(this);
     }
 
-    FragmentTransaction transaction;
+
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
-
-        transaction = mSupportFragmentManager.beginTransaction();
         switch (i){
             case R.id.rb0:
-                transaction.show(mFragments.get(0));
-                currentIndex = 0;
+                viewPager.setCurrentItem(0);
                 break;
             case R.id.rb1:
-                transaction.show(mFragments.get(1));
-                currentIndex = 1;
+                viewPager.setCurrentItem(1);
                 break;
             case R.id.rb2:
-                transaction.show(mFragments.get(2));
-                currentIndex = 2;
+                viewPager.setCurrentItem(2);
                 break;
-        }
-        for (int j = 0; j < mFragments.size(); j++) {
 
-            if (j==currentIndex){
-                continue;
-            }
-            transaction.hide(mFragments.get(j));
         }
 
-        transaction.commit();
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+        mRadioButtons[position].setChecked(true);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

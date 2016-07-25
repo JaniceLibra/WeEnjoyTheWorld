@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="100dp">
+              android:layout_height="200dp"
+              android:weightSum="1">
 
     <!--顶部-->
     <RelativeLayout
@@ -23,5 +24,12 @@
             android:src="@mipmap/ic_menu_more"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
+
+    <ImageView
+        android:layout_width="647dp"
+        android:layout_height="match_parent"
+        android:src="@mipmap/eyepetizer_login_head_bg"
+        android:scaleType="fitEnd"/>
+
 
 </LinearLayout>

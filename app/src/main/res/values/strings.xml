@@ -9,4 +9,10 @@
     <string name="find_fragment">发现</string>
     <string name="author_fragment">作者</string>
 
+
+    <string name="menu_message">我的消息</string>
+    <string name="menu_cache">我的缓存</string>
+    <string name="menu_suggestion">意见反馈</string>
+    <string name="menu_contribute">我要投稿</string>
+
 </resources>
